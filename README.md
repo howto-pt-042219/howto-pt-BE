@@ -1,2 +1,3 @@
 # howto-pt-BE
-How-to Back End
+
+This is the repository for **How-to Back End** project.
