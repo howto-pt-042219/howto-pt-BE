@@ -3,13 +3,15 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon index.js"
+    "server": "nodemon index.js",
+    "test": "cross-env DB_ENV=testing jest --watch --verbose"
   },
   "repository": "https://github.com/howto-pt-042219/howto-pt-BE.git",
   "author": "echopecho <pbsmithtbn@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "helmet": "^3.16.0",
