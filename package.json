@@ -1,0 +1,8 @@
+{
+  "name": "howto-pt-BE",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/howto-pt-042219/howto-pt-BE.git",
+  "author": "echopecho <pbsmithtbn@gmail.com>",
+  "license": "MIT"
+}
