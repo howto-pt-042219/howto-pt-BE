@@ -79,5 +79,6 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
-#config secret
-config/secrets.js
+#config folder
+config/
+
