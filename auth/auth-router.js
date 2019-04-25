@@ -21,9 +21,30 @@ router.post('/register', async (req, res) => {
       res.status(500).json({error: "Something went wrong with the server."})
     }
   } else {
-    res.status(422).json({error: "Please include both username and password"});
+    res.status(422).json({error: "Please include both username and password."});
   }
 });
+
+router.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  if(username && password) {
+    try {
+      const user = await Users.findBy({username}).first();
+      if(user && bcrypt.compareSync(password, user.password)) {
+        const token = generateToken(user);
+        res.status(202).json({
+          token,
+          message: `Welcome ${username}`
+        });
+      }
+    } catch (e) {
+      res.status(500).json({error: "Something went wrong with the server."})
+    }
+  } else {
+    res.status(422).json({error: "Please include both username and password."})
+  }
+})
 
 function generateToken(user) {
   const payload = {
