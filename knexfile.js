@@ -7,7 +7,7 @@ module.exports = {
     connection: {
       filename: './data/how-to.db3'
     },
-    setNullAsDefault: true,
+    useNullAsDefault: true,
     migrations: {
       directory: './data/migrations'
     },
@@ -21,7 +21,7 @@ module.exports = {
     connection: {
       filename: './data/test.dp3'
     },
-    setNullAsDefault: true,
+    useNullAsDefault: true,
     migrations: {
       directory: './data/migrations'
     },
