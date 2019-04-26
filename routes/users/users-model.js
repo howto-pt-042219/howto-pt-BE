@@ -3,6 +3,7 @@ const db = require('../../data/dbConfig.js');
 module.exports = {
   create,
   findBy,
+  findByID,
 };
 
 async function create(user) {
