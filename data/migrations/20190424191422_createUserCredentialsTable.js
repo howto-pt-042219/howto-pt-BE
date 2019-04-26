@@ -9,6 +9,9 @@ exports.up = function(knex, Promise) {
 
     table.string('password')
       .notNullable();
+
+    table.boolean('creator')
+      .notNullable();
   });
 };
 
