@@ -21,7 +21,7 @@ function findByID(id) {
   return db('howtos as h')
   .where('h.id', id)
   .join('user-cred as u', 'u.id', 'h.user_id')
-  .select('h.id', 'title', 'overview', 'likes', 'tries', 'username')
+  .select('h.id', 'title', 'overview', 'likes', 'tries', 'username as author')
   .first();
 };
 
@@ -36,5 +36,6 @@ function findReviews(id) {
   return db('howtos as h')
     .where('h.id', id)
     .join('reviews as r', 'h.id', 'r.howto_id')
-    .select('r.id', 'text');
+    .join('user-cred as u', 'u.id', 'r.user_id')
+    .select('r.id', 'text', 'username');
 }

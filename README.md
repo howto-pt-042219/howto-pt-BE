@@ -5,6 +5,44 @@ This is the repository for **How-to Back End** project.
 # API URL
 https://howto-pt-042219.herokuapp.com/api
 
+# Endpoints
+
+| Method | URL | Description |
+| -- | -- | -- |
+| POST | /auth/register | Adds user creds to DB. Returns id, username and token |
+| POST | /auth/login | Allows user access. Returns token and message |
+| POST | /howto | Adds howto to DB. Returns howto info along with username |
+| GET | /howto | Returns an array of all howtos on DB. |
+| GET | /howto/:id | **:id = howto's id.** Returns all howto information(see below) |
+| POST | /steps | Adds step to the DB. Returns added step |
+| POST | /reviews | Adds review to the DB. Returns added review |
+
+### Single How To object
+```js
+{
+    "id": 1,
+    "title": "How to make this thing",
+    "overview": "Get ready to learn something grand",
+    "likes": 0,
+    "tries": 0,
+    "author": "Sam",
+    "steps": [
+        {
+            "id": 1,
+            "title": "Do the work",
+            "description": "There's only one thing do to. You'll know it when you see it."
+        }
+    ],
+    "reviews": [
+        {
+            "id": 1,
+            "text": "I never knew it could be so simple!",
+            "username": "Dave"
+        }
+    ]
+}
+```
+
 # Schema
 
 ### User
