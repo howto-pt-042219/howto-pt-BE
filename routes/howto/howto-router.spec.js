@@ -29,7 +29,7 @@ describe('the howto endpoint', () => {
       expect(res.status).toBe(404);
     })
 
-    it('should return 202 when successful', async () => {
+    xit('should return 202 when successful', async () => {
       await db('user-cred').insert({
         username: 'test',
         password: bcrypt.hashSync('123', 10),
