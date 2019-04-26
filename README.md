@@ -9,7 +9,12 @@ https://howto-pt-042219.herokuapp.com/api
  - /auth/register
     Adds a user to the database. 
      - Post returns username, ID and JSON Web Token(JWT).
+
+     - Schema:
+     > { username: '',
+     >   password: '',
+     >   creator: boolean }
  
- -/auth/login
+ - /auth/login
     Logs an existing user in.  
      - Post returns JWT and welcome message.
