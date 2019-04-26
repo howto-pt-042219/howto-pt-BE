@@ -5,7 +5,8 @@ const bcrypt = require('bcryptjs');
 
 let user = {
   username: 'test',
-  password: '123'
+  password: '123',
+  creator: true
 };
 
 const hash = bcrypt.hashSync(user.password, 10);
