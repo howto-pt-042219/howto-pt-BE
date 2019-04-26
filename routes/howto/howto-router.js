@@ -24,6 +24,28 @@ router.post('/', async (req, res) => {  // Add restriction later
   } else {
     res.status(422).json({error: "Please provide title, overview and user_id"});
   }
+});
+
+router.get('/', async (req, res) => {
+  try {
+    const howtos = await HowTo.find();
+    res.status(201).json(howtos);
+  } catch (e) {
+    res.status(500).json({error: "Something went wrong with the server."});
+  }
+});
+
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const howto = await HowTo.findByID(id);
+    const steps = await HowTo.findSteps(id);
+    const reviews = await HowTo.findReviews(id);
+    res.status(201).json({...howto, steps, reviews});
+  } catch (e) {
+    res.status(500).json({error: "Something went wrong with the server."})
+  }
 })
 
 
