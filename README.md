@@ -14,8 +14,9 @@ https://howto-pt-042219.herokuapp.com/api
 | POST | /howto | Adds howto to DB. Returns howto info along with username |
 | GET | /howto | Returns an array of all howtos on DB. |
 | GET | /howto/:id | **:id = howto's id.** Returns all howto information(see below) |
-| POST | /steps | Adds step to the DB. Returns added step |
-| POST | /reviews | Adds review to the DB. Returns added review |
+| PUT | /howto/:id | Updates title and overview. API handles user_id to prevent conflicts. Returns updated howto |
+| POST | /howto/:id/steps | Adds step to the DB. Returns added step |
+| POST | /howto/:id/reviews | Adds review to the DB. Returns added review |
 
 ### Single How To object
 ```js
@@ -26,6 +27,7 @@ https://howto-pt-042219.herokuapp.com/api
     "likes": 0,
     "tries": 0,
     "author": "Sam",
+    "author_id": 1
     "steps": [
         {
             "id": 1,

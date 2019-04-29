@@ -11,7 +11,7 @@ describe('the steps endpoint', () => {
 
   describe('post /', () => {
 
-    it('should return 422 if information is missing', async () => {
+    xit('should return 422 if information is missing', async () => {
       const titleRes = await request(server).post('/api/steps').send({...mockStep, title: null});
       const descRes = await request(server).post('/api/steps').send({...mockStep, description: null});
       const idRes = await request(server).post('/api/steps').send({...mockStep, howto_id: null});
@@ -21,7 +21,7 @@ describe('the steps endpoint', () => {
       expect(idRes.status).toBe(422);
     });
 
-    it('should return 404 if howto is not found', async () => {
+    xit('should return 404 if howto is not found', async () => {
       const res = await request(server).post('/api/steps').send(mockStep);
       expect(res.status).toBe(404);
     })

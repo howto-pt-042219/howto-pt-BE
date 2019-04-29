@@ -1,4 +1,4 @@
-const router = require('express').Router();
+const router = require('express').Router({mergeParams: true});
 
 const Reviews = require('./reviews-model.js');
 const Users = require('../users/users-model.js');
@@ -6,12 +6,13 @@ const HowTo = require('../howto/howto-model.js');
 
 router.post('/', async (req, res) => {
   const newReview = req.body;
-  const { text, user_id, howto_id } = newReview;
+  const { text, user_id} = newReview;
+  newReview.howto_id = Number(req.params.id);
 
-  if(text && user_id && howto_id) {
+  if(text && user_id) {
     try {
       const user = await Users.findByID(user_id);
-      const howto = await HowTo.findByID(howto_id);
+      const howto = await HowTo.findByID(newReview.howto_id);
 
       if(user && howto) {
         const review = await Reviews.create(newReview);
@@ -26,6 +27,6 @@ router.post('/', async (req, res) => {
   } else {
     res.status(422).json({error: "Please provide text, user_id and howto_id"});
   }
-})
+});
 
 module.exports = router;
