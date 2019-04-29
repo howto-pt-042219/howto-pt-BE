@@ -18,6 +18,8 @@ https://howto-pt-042219.herokuapp.com/api
 | DELETE | /howto/:id | Removes How To from DB along with associated steps and reviews |
 | POST | /howto/:id/steps | Adds step to the DB. Returns added step |
 | POST | /howto/:id/reviews | Adds review to the DB. Returns added review |
+| PUT | /howto/:id/reviews/:rev_id | Updates the text of selected review. Only text required. Backend handles all ID's. Returns new review |
+| DELETE | /howto/:id/reviews/:rev_id | Removes review from the database |
 
 ### Single How To object
 ```js

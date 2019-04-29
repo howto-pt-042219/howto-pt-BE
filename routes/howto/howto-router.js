@@ -43,7 +43,7 @@ router.get('/:id', async (req, res) => {
 
   try {
     const howto = await HowTo.findByID(id);
-    
+
     if(howto) {
       const steps = await HowTo.findSteps(id);
       const reviews = await HowTo.findReviews(id);
@@ -84,7 +84,7 @@ router.put('/:id', async (req, res) => {
     }
 
   } else {
-    res.status(422).json({error: "Please provide title, overview and user_id"});y
+    res.status(422).json({error: "Please provide title, overview and user_id"});
   }
 });
 
