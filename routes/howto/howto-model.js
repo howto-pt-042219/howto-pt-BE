@@ -7,6 +7,7 @@ module.exports = {
   findSteps,
   findReviews,
   edit,
+  remove,
 }
 
 async function create(howto) {
@@ -43,4 +44,10 @@ function findReviews(id) {
 
 function edit(id, changes) {
   return db('howtos').where({id}).update(changes);
-}
+};
+
+async function remove(id) {
+  await db('steps').where('howto_id', id).del();
+  await db('reviews').where('howto_id', id).del();
+  return db('howtos').where({id}).del();
+};

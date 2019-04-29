@@ -15,6 +15,7 @@ https://howto-pt-042219.herokuapp.com/api
 | GET | /howto | Returns an array of all howtos on DB. |
 | GET | /howto/:id | **:id = howto's id.** Returns all howto information(see below) |
 | PUT | /howto/:id | Updates title and overview. API handles user_id to prevent conflicts. Returns updated howto |
+| DELETE | /howto/:id | Removes How To from DB along with associated steps and reviews |
 | POST | /howto/:id/steps | Adds step to the DB. Returns added step |
 | POST | /howto/:id/reviews | Adds review to the DB. Returns added review |
 
