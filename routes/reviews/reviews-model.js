@@ -4,6 +4,9 @@ module.exports = {
   create,
   find,
   findByID,
+  findByHowto,
+  edit,
+  remove,
 };
 
 async function create(review) {
@@ -13,8 +16,20 @@ async function create(review) {
 
 function find() {
   return db('steps');
-}
+};
 
 function findByID(id) {
   return db('reviews').where({id}).first();
+};
+
+function findByHowto(howto_id) {
+  return db('reviews').where({howto_id});
+}
+
+function edit(id, changes) {
+  return db('reviews').where({id}).update(changes);
+};
+
+function remove(id) {
+  return db('reviews').where({id}).del();
 }

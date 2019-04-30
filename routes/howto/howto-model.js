@@ -6,6 +6,8 @@ module.exports = {
   findByID,
   findSteps,
   findReviews,
+  edit,
+  remove,
 }
 
 async function create(howto) {
@@ -21,7 +23,7 @@ function findByID(id) {
   return db('howtos as h')
   .where('h.id', id)
   .join('user-cred as u', 'u.id', 'h.user_id')
-  .select('h.id', 'title', 'overview', 'likes', 'tries', 'username as author')
+  .select('h.id', 'title', 'overview', 'likes', 'tries', 'username as author', 'u.id as author_id')
   .first();
 };
 
@@ -38,4 +40,14 @@ function findReviews(id) {
     .join('reviews as r', 'h.id', 'r.howto_id')
     .join('user-cred as u', 'u.id', 'r.user_id')
     .select('r.id', 'text', 'username');
-}
+};
+
+function edit(id, changes) {
+  return db('howtos').where({id}).update(changes);
+};
+
+async function remove(id) {
+  await db('steps').where('howto_id', id).del();
+  await db('reviews').where('howto_id', id).del();
+  return db('howtos').where({id}).del();
+};
