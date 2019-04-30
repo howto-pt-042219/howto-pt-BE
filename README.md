@@ -17,7 +17,9 @@ https://howto-pt-042219.herokuapp.com/api
 | PUT | /howto/:id | Updates title and overview. API handles user_id to prevent conflicts. Returns updated howto |
 | DELETE | /howto/:id | Removes How To from DB along with associated steps and reviews |
 | POST | /howto/:id/steps | Adds step to the DB. Returns added step |
+| GET | /howto/:id/steps | Returns all steps belonging to how-to matching :id. |
 | POST | /howto/:id/reviews | Adds review to the DB. Returns added review |
+| GET | /howto/:id/reviews | Returns all reviews belonging to how-to matching :id |
 | PUT | /howto/:id/reviews/:rev_id | Updates the text of selected review. Only text required. Backend handles all ID's. Returns new review |
 | DELETE | /howto/:id/reviews/:rev_id | Removes review from the database |
 
