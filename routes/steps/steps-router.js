@@ -27,4 +27,13 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.get('/', async (req, res) => {
+  try {
+    const steps = await Steps.findByHowto(req.params.id);
+    res.status(201).json(steps);
+  } catch (e) {
+    res.status(500).json({error: "Something went wrong with the server."})
+  }
+})
+
 module.exports = router;

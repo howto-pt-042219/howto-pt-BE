@@ -4,6 +4,7 @@ module.exports = {
   create,
   find,
   findByID,
+  findByHowto,
   edit,
   remove,
 };
@@ -20,6 +21,10 @@ function find() {
 function findByID(id) {
   return db('reviews').where({id}).first();
 };
+
+function findByHowto(howto_id) {
+  return db('reviews').where({howto_id});
+}
 
 function edit(id, changes) {
   return db('reviews').where({id}).update(changes);

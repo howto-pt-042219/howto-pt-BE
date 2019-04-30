@@ -28,6 +28,15 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.get('/', async (req, res) => {
+  try {
+    const reviews = await Reviews.findByHowto(req.params.id);
+    res.status(201).json(reviews); 
+  } catch (e) {
+    res.status(500).json({error: "Something went wrong with the server."});
+  }
+})
+
 router.put('/:rev_id', async (req, res) => {
   const review = { text } = req.body;
   const { id, rev_id } = req.params;
