@@ -15,6 +15,6 @@ function findBy(username) {
   return db('user-cred').where(username)
 }
 
-async function findByID(id) {
-  return db('user-cred').where({id}).first().select('id', 'username');
+function findByID(id) {
+  return db('user-cred').where({id}).first().select('id', 'username', 'creator');
 };

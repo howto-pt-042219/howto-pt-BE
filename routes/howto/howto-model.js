@@ -31,7 +31,7 @@ function findSteps(id) {
   return db('howtos as h')
     .where('h.id', id)
     .join('steps as s', 'h.id', 's.howto_id')
-    .select('s.id', 's.title', 'description')
+    .select('s.id', 's.title', 'description', 'num')
 };
 
 function findReviews(id) {

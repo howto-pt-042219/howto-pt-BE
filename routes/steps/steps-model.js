@@ -5,6 +5,8 @@ module.exports = {
   find,
   findByID,
   findByHowto,
+  findRemainingSteps,
+  edit,
 };
 
 async function create(step) {
@@ -22,4 +24,12 @@ function findByID(id) {
 
 function findByHowto(howto_id) {
   return db('steps').where({howto_id});
+};
+
+function findRemainingSteps(num, howto_id) {
+  return db('steps').where({howto_id}).andWhere('step_no', '>=', num);
+}
+
+function edit(id, changes) {
+  return db('steps').where({id}).update(changes);
 }

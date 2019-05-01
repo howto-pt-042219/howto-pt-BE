@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const Users = require('../users/users-model.js');
-const jwtSecret = require('../../config/secrets.js').jwtSecret;
+const jwtSecret = process.env.JWT_SECRET;
 
 
 router.post('/register', async (req, res) => {
@@ -50,7 +50,7 @@ function generateToken(user) {
   const payload = {
     subject: user.id,
     username: user.username,
-    creator: user.creator
+    creator: user.creator === 1 ? true : false
   };
 
   const options = {
