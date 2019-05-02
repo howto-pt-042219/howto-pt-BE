@@ -5,8 +5,6 @@ module.exports = {
   find,
   findByID,
   findByHowto,
-  findLastStep,
-  findRemainingSteps,
   edit,
   remove,
 };
@@ -26,14 +24,6 @@ function findByID(id) {
 
 function findByHowto(howto_id) {
   return db('steps').where({howto_id});
-};
-
-function findLastStep(howto_id) {
-  return db('steps').max('num').where({howto_id});
-};
-
-function findRemainingSteps(num, howto_id) {
-  return db('steps').where({howto_id}).andWhere('step_no', '>=', num);
 };
 
 function edit(id, changes) {

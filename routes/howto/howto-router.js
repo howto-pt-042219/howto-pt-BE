@@ -1,5 +1,5 @@
 const router = require('express').Router();
-// const { viewer, creator } = require('../auth/restricted-middleware.js');
+const { viewer, creator } = require('../auth/restricted-middleware.js');
 
 const HowTo = require('./howto-model.js');
 const Users = require('../users/users-model.js');
@@ -28,6 +28,45 @@ router.post('/', async (req, res) => {  // creator restriction
     }
   } else {
     res.status(422).json({error: "Please provide title, overview and user_id"});
+  }
+});
+
+router.post('/:id/liked', viewer, async (req, res) => {
+  const data = {
+    howto_id: Number(req.params.id),
+    user_id: req.decodedJWT.subject
+  };
+ 
+  try {
+    const count = await HowTo.like(data);
+
+    if(count > 0) {
+      res.status(201).json({message: "Liked!"})
+    } else {
+      res.status(422).json({message: "Already liked"})
+    }
+  } catch (e) {
+    res.status(500).json({error: "Something went wrong with the server."})
+  }
+});
+
+router.post('/:id/tried', viewer, async (req, res) => {
+  const data = {
+    howto_id: Number(req.params.id),
+    user_id: req.decodedJWT.subject
+  };
+ 
+  try {
+    const count = await HowTo.tried(data);
+
+    if(count > 0) {
+      res.status(201).json({message: "Tried!"})
+    } else {
+      res.status(422),json({message: "Already tried"})
+    }
+    
+  } catch (e) {
+    res.status(500).json({error: "Something went wrong with the server."})
   }
 });
 
@@ -68,7 +107,7 @@ router.put('/:id', async (req, res) => {  // creator restriction
     try {
       const oldHowto = await HowTo.findByID(id);
 
-      if(oldHowto ) { // replace for auth ** && req.decodedJWT.subject === oldHowto.author_id **
+      if(oldHowto ) { // add for auth ** && req.decodedJWT.subject === oldHowto.author_id **
         howto.user_id = oldHowto.author_id;
         const count = await HowTo.edit(id, howto);
 
@@ -96,7 +135,7 @@ router.delete('/:id', async (req, res) => {  // creator restriction
   try {
     const howto = await HowTo.findByID(id);
     
-    if(howto ) {  // replace for auth ** && req.decodedJWT.subject === howto.author_id **
+    if(howto ) {  // add for auth ** && req.decodedJWT.subject === howto.author_id **
       const count = await HowTo.remove(id);
       
       if(count === 1) {

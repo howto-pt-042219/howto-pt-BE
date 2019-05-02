@@ -8,7 +8,7 @@ const connection = knex(config[dbENV]);
 const Steps = require('./steps-model.js');
 const HowTo = require('../howto/howto-model.js');
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res) => { // creator restriction
   const newStep = { title, description, num } = req.body;
   newStep.howto_id = Number(req.params.id);
 
@@ -52,7 +52,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res) => { // viewer restriction
   try {
     const steps = await Steps.findByHowto(req.params.id);
     steps.sort((a, b) => a.num - b.num);
@@ -62,7 +62,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.put('/:step_id', async (req, res) => {
+router.put('/:step_id', async (req, res) => { // creator restriction
   const newStep = { title, description } = req.body;
   const { id, step_id } = req.params;
 
@@ -93,7 +93,7 @@ router.put('/:step_id', async (req, res) => {
   }
 });
 
-router.delete('/:step_id', async (req, res) => {
+router.delete('/:step_id', async (req, res) => { // creator restriction
   const id = req.params.step_id;
 
   try {
