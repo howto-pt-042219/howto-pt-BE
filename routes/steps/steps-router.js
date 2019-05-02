@@ -20,15 +20,12 @@ router.post('/', async (req, res) => {
         let steps = await Steps.findByHowto(newStep.howto_id);
 
         if(steps.map(step => step.num).includes(num)) {
-          steps = steps.map(step => {
-            if(step.num >= num) {
-              step.num += 1;
-            }
-            return step;
-          });
 
           connection.transaction(trx => {
             let updates = steps.map(step => {
+              if(step.num >= num) {
+                step.num += 1;
+              }
               return connection('steps')
                 .where('id', step.id)
                 .update(step)
@@ -95,5 +92,40 @@ router.put('/:step_id', async (req, res) => {
     res.status(422).json({error: "Provide both title and description."})
   }
 });
+
+router.delete('/:step_id', async (req, res) => {
+  const id = req.params.step_id;
+
+  try {
+    const step = await Steps.findByID(id);
+
+    if(step) {
+      const steps = await Steps.findByHowto(step.howto_id);
+      
+      connection.transaction(trx => {
+        let updates = steps.map(el => {
+          if(el.num > step.num) {
+            el.num -= 1
+          }
+          return connection('steps')
+            .where('id', el.id)
+            .update(el)
+            .transacting(trx)
+        });
+        return Promise.all(updates)
+          .then(trx.commit)
+          .catch(trx.rollback);
+      });
+
+      const count = await Steps.remove(id);
+      if(count === 1) {
+        res.status(201).json({message: "Step was deleted."})
+      }
+    }
+
+  } catch (e) { 
+    res.status(500).json({error: "Something went wrong with the server."})
+  }
+})
 
 module.exports = router;

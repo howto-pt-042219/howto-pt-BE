@@ -11,7 +11,7 @@ router.post('/', async (req, res) => {  // creator restriction
   const newHowto = { title, overview } = req.body;
 
   if(title && overview) {
-    newHowto.user_id = req.decodedJWT.subject || req.body.id;
+    newHowto.user_id = req.body.user_id || req.decodedJWT.subject
 
     try {
       const user = await Users.findByID(newHowto.user_id);
