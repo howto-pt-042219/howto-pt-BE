@@ -1,4 +1,5 @@
 const router = require('express').Router();
+// const { viewer, creator } = require('../auth/restricted-middleware.js');
 
 const HowTo = require('./howto-model.js');
 const Users = require('../users/users-model.js');
@@ -6,13 +7,14 @@ const Users = require('../users/users-model.js');
 const stepsRouter = require('../steps/steps-router.js');
 const reviewsRouter = require('../reviews/reviews-router.js');
 
-router.post('/', async (req, res) => {  // Add restriction later
-  const newHowto = req.body;
-  const { title, overview, user_id } = newHowto;
+router.post('/', async (req, res) => {  // creator restriction
+  const newHowto = { title, overview } = req.body;
 
-  if(title && overview && user_id) {
+  if(title && overview) {
+    newHowto.user_id = req.body.user_id || req.decodedJWT.subject
+
     try {
-      const user = await Users.findByID(user_id);
+      const user = await Users.findByID(newHowto.user_id);
 
       if(user) {
         const howto = await HowTo.create(newHowto);
@@ -29,7 +31,7 @@ router.post('/', async (req, res) => {  // Add restriction later
   }
 });
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res) => {  // viewer restriction
   try {
     const howtos = await HowTo.find();
     res.status(201).json(howtos);
@@ -38,7 +40,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {  // viewer restriction
   const { id } = req.params;
 
   try {
@@ -46,6 +48,7 @@ router.get('/:id', async (req, res) => {
 
     if(howto) {
       const steps = await HowTo.findSteps(id);
+      steps.sort((a, b) => a.num - b.num)
       const reviews = await HowTo.findReviews(id);
       res.status(201).json({...howto, steps, reviews});
     } else {
@@ -57,16 +60,15 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
-  const howto = req.body;
-  const { title, overview } = howto;
+router.put('/:id', async (req, res) => {  // creator restriction
+  const howto ={ title, overview } = req.body;
   const {id} = req.params;
 
   if(title && overview) {
     try {
       const oldHowto = await HowTo.findByID(id);
 
-      if(oldHowto) {
+      if(oldHowto ) { // replace for auth ** && req.decodedJWT.subject === oldHowto.author_id **
         howto.user_id = oldHowto.author_id;
         const count = await HowTo.edit(id, howto);
 
@@ -88,13 +90,13 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {  // creator restriction
   const { id } = req.params;
 
   try {
     const howto = await HowTo.findByID(id);
     
-    if(howto) {
+    if(howto ) {  // replace for auth ** && req.decodedJWT.subject === howto.author_id **
       const count = await HowTo.remove(id);
       
       if(count === 1) {
