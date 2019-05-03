@@ -7,7 +7,7 @@ const Users = require('../users/users-model.js');
 const stepsRouter = require('../steps/steps-router.js');
 const reviewsRouter = require('../reviews/reviews-router.js');
 
-router.post('/', async (req, res) => {  // creator restriction
+router.post('/', creator, async (req, res) => {  // creator restriction
   const newHowto = { title, overview } = req.body;
 
   if(title && overview) {
