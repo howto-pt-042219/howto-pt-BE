@@ -11,7 +11,7 @@ router.post('/', creator, async (req, res) => {  // creator restriction
   const newHowto = { title, overview } = req.body;
 
   if(title && overview) {
-    newHowto.user_id = req.body.user_id || req.decodedJWT.subject
+    newHowto.user_id = req.decodedJWT.subject
 
     try {
       const user = await Users.findByID(newHowto.user_id);
@@ -70,7 +70,7 @@ router.post('/:id/tried', viewer, async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {  // viewer restriction
+router.get('/', viewer, async (req, res) => {  // viewer restriction
   try {
     const howtos = await HowTo.find();
     res.status(201).json(howtos);
@@ -79,7 +79,7 @@ router.get('/', async (req, res) => {  // viewer restriction
   }
 });
 
-router.get('/:id', async (req, res) => {  // viewer restriction
+router.get('/:id', viewer, async (req, res) => {  // viewer restriction
   const { id } = req.params;
 
   try {
@@ -99,7 +99,7 @@ router.get('/:id', async (req, res) => {  // viewer restriction
   }
 });
 
-router.put('/:id', async (req, res) => {  // creator restriction
+router.put('/:id', creator, async (req, res) => {  // creator restriction
   const howto ={ title, overview } = req.body;
   const {id} = req.params;
 
@@ -107,7 +107,7 @@ router.put('/:id', async (req, res) => {  // creator restriction
     try {
       const oldHowto = await HowTo.findByID(id);
 
-      if(oldHowto ) { // add for auth ** && req.decodedJWT.subject === oldHowto.author_id **
+      if(req.decodedJWT.subject === oldHowto.author_id) { // add for auth ** && req.decodedJWT.subject === oldHowto.author_id **
         howto.user_id = oldHowto.author_id;
         const count = await HowTo.edit(id, howto);
 
@@ -117,7 +117,7 @@ router.put('/:id', async (req, res) => {  // creator restriction
         }
        
       } else {
-        res.status(404).json({error: "Either user or howto does not exist."});
+        res.status(401).json({error: "You are not authorized to edit this How To."});
       }
 
     } catch (e) {
@@ -129,13 +129,13 @@ router.put('/:id', async (req, res) => {  // creator restriction
   }
 });
 
-router.delete('/:id', async (req, res) => {  // creator restriction
+router.delete('/:id', creator, async (req, res) => {  // creator restriction
   const { id } = req.params;
 
   try {
     const howto = await HowTo.findByID(id);
     
-    if(howto ) {  // add for auth ** && req.decodedJWT.subject === howto.author_id **
+    if(req.decodedJWT.subject === howto.author_id) {  // add for auth ** && req.decodedJWT.subject === howto.author_id **
       const count = await HowTo.remove(id);
       
       if(count === 1) {
@@ -143,7 +143,7 @@ router.delete('/:id', async (req, res) => {  // creator restriction
       }
 
     } else {
-      res.status(404).json({error: "How To was not found."})
+      res.status(401).json({error: "You are not authorized to delete this How To."})
     }
 
   } catch (e) {

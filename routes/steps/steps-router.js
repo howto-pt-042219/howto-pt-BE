@@ -1,6 +1,7 @@
 const router = require('express').Router({mergeParams: true});  // /howto/:id/steps
 const knex = require('knex');
 const config = require('../../knexfile.js');
+const { viewer, creator } = require('../auth/restricted-middleware.js');
 
 const dbENV = process.env.DB_ENV || 'development';
 const connection = knex(config[dbENV]);
@@ -8,7 +9,7 @@ const connection = knex(config[dbENV]);
 const Steps = require('./steps-model.js');
 const HowTo = require('../howto/howto-model.js');
 
-router.post('/', async (req, res) => { // creator restriction
+router.post('/', creator, async (req, res) => { // creator restriction
   const newStep = { title, description, num } = req.body;
   newStep.howto_id = Number(req.params.id);
 
@@ -16,7 +17,7 @@ router.post('/', async (req, res) => { // creator restriction
     try {
       const howto = await HowTo.findByID(newStep.howto_id);
 
-      if(howto) {
+      if(req.decodedJWT.subject === howto.author_id) {
         let steps = await Steps.findByHowto(newStep.howto_id);
 
         if(steps.map(step => step.num).includes(num)) {
@@ -41,7 +42,7 @@ router.post('/', async (req, res) => { // creator restriction
         res.status(202).json(step);
 
       } else {
-        res.status(404).json({error: "HowTo with that ID does not exist."});
+        res.status(401).json({error: "You are not authorized to edit this How To."});
       }
 
     } catch (e) {
@@ -52,7 +53,7 @@ router.post('/', async (req, res) => { // creator restriction
   }
 });
 
-router.get('/', async (req, res) => { // viewer restriction
+router.get('/', viewer, async (req, res) => { // viewer restriction
   try {
     const steps = await Steps.findByHowto(req.params.id);
     steps.sort((a, b) => a.num - b.num);
@@ -62,16 +63,16 @@ router.get('/', async (req, res) => { // viewer restriction
   }
 });
 
-router.put('/:step_id', async (req, res) => { // creator restriction
+router.put('/:step_id', creator, async (req, res) => { // creator restriction
   const newStep = { title, description } = req.body;
   const { id, step_id } = req.params;
 
   if(title && description) {
     try {
       const step = await Steps.findByID(step_id);
-      // const howto = await HowTo.findByID(id);
+      const howto = await HowTo.findByID(id);
 
-      if(step) {
+      if(req.decodedJWT.subject === howto.author_id) {
         newStep.howto_id = step.howto_id;
         newStep.num = step.num;
         const count = await Steps.edit(step_id, newStep);
@@ -93,13 +94,14 @@ router.put('/:step_id', async (req, res) => { // creator restriction
   }
 });
 
-router.delete('/:step_id', async (req, res) => { // creator restriction
+router.delete('/:step_id', creator, async (req, res) => { // creator restriction
   const id = req.params.step_id;
 
   try {
     const step = await Steps.findByID(id);
+    const howto = await HowTo.findByID(id);
 
-    if(step) {
+    if(step && req.decodedJWT.subject === howto.author_id) {
       const steps = await Steps.findByHowto(step.howto_id);
       
       connection.transaction(trx => {
