@@ -10,7 +10,7 @@ module.exports = {
 };
 
 async function create(step) {
-  const [id] = await db('steps').insert(step);
+  const [id] = await db('steps').insert(step, ['id']);
   return findByID(id);
 };
 
@@ -27,7 +27,7 @@ function findByHowto(howto_id) {
 };
 
 function edit(id, changes) {
-  return db('steps').where({id}).update(changes);
+  return db('steps').where({id}).update(changes, ['id']);
 };
 
 function remove(id) {

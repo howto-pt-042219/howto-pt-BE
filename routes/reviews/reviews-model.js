@@ -10,7 +10,7 @@ module.exports = {
 };
 
 async function create(review) {
-  const [id] = await db('reviews').insert(review);
+  const [id] = await db('reviews').insert(review, ['id']);
   return findByID(id);
 };
 
@@ -27,7 +27,7 @@ function findByHowto(howto_id) {
 }
 
 function edit(id, changes) {
-  return db('reviews').where({id}).update(changes);
+  return db('reviews').where({id}).update(changes, ['id']);
 };
 
 function remove(id) {
