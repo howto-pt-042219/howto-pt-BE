@@ -8,6 +8,9 @@ module.exports = {
   findReviews,
   edit,
   remove,
+  like,
+  tried,
+  findLikes,
 }
 
 async function create(howto) {
@@ -19,7 +22,10 @@ function find() {
   return db('howtos');
 };
 
-function findByID(id) {
+async function findByID(id) {
+  const likes = await db('likes').count().where('howto_id', id).first();
+  const tries = await db('tries').count().where('howto_id', id).first();
+  await db('howtos').where({id}).update({'likes': likes['count(*)'], 'tries': tries['count(*)']});
   return db('howtos as h')
   .where('h.id', id)
   .join('user-cred as u', 'u.id', 'h.user_id')
@@ -51,3 +57,21 @@ async function remove(id) {
   await db('reviews').where('howto_id', id).del();
   return db('howtos').where({id}).del();
 };
+
+async function like(data) {
+  const liked = await db('likes').where('howto_id', data.howto_id).andWhere('user_id', data.user_id);
+  if(liked.length === 0) {
+    return db('likes').insert(data);
+  }
+};
+
+async function tried(data) {
+  const liked = await db('tries').where('howto_id', data.howto_id).andWhere('user_id', data.user_id);
+  if(liked.length === 0) {
+    return db('tries').insert(data);
+  }
+};
+
+function findLikes(id) { 
+  return db('likes').count().where('howto_id', id).first();
+}

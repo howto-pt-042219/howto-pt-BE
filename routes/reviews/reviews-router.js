@@ -4,7 +4,7 @@ const Reviews = require('./reviews-model.js');
 const Users = require('../users/users-model.js');
 const HowTo = require('../howto/howto-model.js');
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res) => { // viewer restriction
   const newReview = { text, user_id} = req.body;
   newReview.howto_id = Number(req.params.id);
 
@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res) => { //viewer restriction
   try {
     const reviews = await Reviews.findByHowto(req.params.id);
     res.status(201).json(reviews); 
@@ -37,7 +37,7 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.put('/:rev_id', async (req, res) => {
+router.put('/:rev_id', async (req, res) => { // viewer restriction
   const review = { text } = req.body;
   const { id, rev_id } = req.params;
 
@@ -59,7 +59,7 @@ router.put('/:rev_id', async (req, res) => {
   }
 });
 
-router.delete('/:rev_id', async (req, res) => {
+router.delete('/:rev_id', async (req, res) => { // viewer restriction
   const { id, rev_id } = req.params;
 
   try {

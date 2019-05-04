@@ -1,6 +1,8 @@
 
 exports.up = function(knex, Promise) {
   return knex.schema.createTable('likes', table => {
+    table.increments();
+    
     table.boolean('liked')
       .defaultTo(true);
 

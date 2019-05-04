@@ -1,6 +1,8 @@
 
 exports.up = function(knex, Promise) {
   return knex.schema.createTable('tries', table => {
+    table.increments();
+    
     table.boolean('tried')
       .defaultTo(true);
 
