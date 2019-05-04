@@ -14,7 +14,8 @@ router.post('/', async (req, res) => {  // creator restriction
     newHowto.user_id = req.body.user_id || req.decodedJWT.subject
 
     try {
-      const user = await Users.findByID(newHowto.user_id);
+      // const user = await Users.findByID(newHowto.user_id);
+      const user = true;
 
       if(user) {
         const howto = await HowTo.create(newHowto);
