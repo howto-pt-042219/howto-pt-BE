@@ -14,11 +14,14 @@ router.post('/', async (req, res) => {  // creator restriction
     newHowto.user_id = req.body.user_id || req.decodedJWT.subject
 
     try {
+      const howto = await HowTo.create(newHowto);
+        console.log(howto);
       // const user = await Users.findByID(newHowto.user_id);
       const user = true;
 
       if(user) {
         const howto = await HowTo.create(newHowto);
+        console.log(howto);
         res.status(202).json(howto);
       } else {
         res.status(404).json({error: "User with that ID does not exist."});
