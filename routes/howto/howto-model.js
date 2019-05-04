@@ -14,8 +14,9 @@ module.exports = {
 }
 
 async function create(howto) {
-  const [id] = await db('howtos').insert(howto, ['id']);
-  return findByID(id);
+  // const [id] = await db('howtos').insert(howto, ['id']);
+  // return findByID(id);
+  return db('howtos').insert(howto, ['id'])
 };
 
 function find() {
