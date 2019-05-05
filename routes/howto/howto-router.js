@@ -140,7 +140,8 @@ router.delete('/:id', async (req, res) => {  // creator restriction
       const count = await HowTo.remove(id);
       
       if(count === 1) {
-        res.status(201).json({message: "How To was deleted."})
+        const newList = await HowTo.find();
+        res.status(201).json(newList);
       }
 
     } else {
