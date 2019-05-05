@@ -60,7 +60,7 @@ router.post('/:id/tried', viewer, async (req, res) => {
   try {
     const count = await HowTo.tried(data);
 
-    if(count > 0) {
+    if(count.length > 0) {
       res.status(201).json({message: "Tried!"})
     } else {
       res.status(422),json({message: "Already tried"})

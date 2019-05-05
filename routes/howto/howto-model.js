@@ -69,8 +69,7 @@ async function like(data) {
 async function tried(data) {
   const liked = await db('tries').where('howto_id', data.howto_id).andWhere('user_id', data.user_id);
   if(liked.length === 0) {
-    const id = await db('tries').insert(data, ['id']);
-    return id[0].id;
+    return db('tries').insert(data, ['id']);
   }
 };
 
