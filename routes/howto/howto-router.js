@@ -41,7 +41,7 @@ router.post('/:id/liked', viewer, async (req, res) => {
     const count = await HowTo.like(data);
     console.log(count);
 
-    if(count > 0) {
+    if(count.length > 0) {
       res.status(201).json({message: "Liked!"})
     } else {
       res.status(422).json({message: "Already liked"})

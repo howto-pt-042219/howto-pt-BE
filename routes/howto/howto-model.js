@@ -62,8 +62,7 @@ async function remove(id) {
 async function like(data) {
   const liked = await db('likes').where('howto_id', data.howto_id).andWhere('user_id', data.user_id);
   if(liked.length === 0) {
-    const id = await db('likes').insert(data, ['id']);
-    return id[0].id;
+    return db('likes').insert(data, ['id']);
   }
 };
 
