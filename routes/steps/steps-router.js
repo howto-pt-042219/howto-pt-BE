@@ -76,7 +76,7 @@ router.put('/:step_id', async (req, res) => { // creator restriction
         newStep.num = step.num;
         const count = await Steps.edit(step_id, newStep);
         
-        if(count === 1) {
+        if(count === Number(step_id)) {
           const updateStep = await Steps.findByID(step_id);
           res.status(201).json(updateStep);
         }

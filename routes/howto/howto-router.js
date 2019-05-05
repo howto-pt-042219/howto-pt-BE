@@ -14,14 +14,10 @@ router.post('/', async (req, res) => {  // creator restriction
     newHowto.user_id = req.body.user_id || req.decodedJWT.subject
 
     try {
-      const howto = await HowTo.create(newHowto);
-        console.log(howto);
-      // const user = await Users.findByID(newHowto.user_id);
-      const user = true;
+      const user = await Users.findByID(newHowto.user_id);
 
       if(user) {
         const howto = await HowTo.create(newHowto);
-        console.log(howto);
         res.status(202).json(howto);
       } else {
         res.status(404).json({error: "User with that ID does not exist."});
@@ -115,7 +111,7 @@ router.put('/:id', async (req, res) => {  // creator restriction
         howto.user_id = oldHowto.author_id;
         const count = await HowTo.edit(id, howto);
 
-        if(count === 1 ) {
+        if(count === Number(id)) {
           const updateHowto = await HowTo.findByID(id);
           res.status(201).json(updateHowto);
         }

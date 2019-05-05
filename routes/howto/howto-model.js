@@ -14,9 +14,9 @@ module.exports = {
 }
 
 async function create(howto) {
-  // const [id] = await db('howtos').insert(howto, ['id']);
-  // return findByID(id);
-  return db('howtos').insert(howto, ['id'])
+  const id = await db('howtos').insert(howto, ['id']);
+  return findByID(id[0].id);
+  // return db('howtos').insert(howto, ['id'])
 };
 
 function find() {
@@ -24,9 +24,9 @@ function find() {
 };
 
 async function findByID(id) {
-  const likes = await db('likes').count().where('howto_id', id).first();
-  const tries = await db('tries').count().where('howto_id', id).first();
-  await db('howtos').where({id}).update({'likes': likes['count(*)'], 'tries': tries['count(*)']});
+  const likes = await db('likes').count('howto_id').where('howto_id', id);
+  const tries = await db('tries').count('howto_id').where('howto_id', id);
+  await db('howtos').where('id', id).update({'likes': likes[0].count, 'tries': tries[0].count});
   return db('howtos as h')
   .where('h.id', id)
   .join('user-cred as u', 'u.id', 'h.user_id')
@@ -49,8 +49,9 @@ function findReviews(id) {
     .select('r.id', 'text', 'username');
 };
 
-function edit(id, changes) {
-  return db('howtos').where({id}).update(changes, ['id']);
+async function edit(id, changes) {
+  const update = await db('howtos').where('id', id).update(changes, ['id']);
+  return update[0].id
 };
 
 async function remove(id) {

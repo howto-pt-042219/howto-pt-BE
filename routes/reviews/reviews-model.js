@@ -10,8 +10,8 @@ module.exports = {
 };
 
 async function create(review) {
-  const [id] = await db('reviews').insert(review, ['id']);
-  return findByID(id);
+  const id = await db('reviews').insert(review, ['id']);
+  return findByID(id[0].id);
 };
 
 function find() {
@@ -26,10 +26,11 @@ function findByHowto(howto_id) {
   return db('reviews').where({howto_id});
 }
 
-function edit(id, changes) {
-  return db('reviews').where({id}).update(changes, ['id']);
+async function edit(id, changes) {
+  const update = await db('reviews').where('id', id).update(changes, ['id']);
+  return update[0].id;
 };
 
 function remove(id) {
-  return db('reviews').where({id}).del();
+  return db('reviews').where('id', id).del();
 }
