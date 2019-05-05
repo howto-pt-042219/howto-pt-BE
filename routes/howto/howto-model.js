@@ -56,7 +56,7 @@ function edit(id, changes) {
 async function remove(id) {
   await db('steps').where('howto_id', id).del();
   await db('reviews').where('howto_id', id).del();
-  return db('howtos').where({id}).del();
+  return db('howtos').where('id', id).del();
 };
 
 async function like(data) {
