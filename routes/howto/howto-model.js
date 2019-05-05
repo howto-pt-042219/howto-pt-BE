@@ -16,7 +16,6 @@ module.exports = {
 async function create(howto) {
   const id = await db('howtos').insert(howto, ['id']);
   return findByID(id[0].id);
-  // return db('howtos').insert(howto, ['id'])
 };
 
 function find() {
@@ -63,14 +62,16 @@ async function remove(id) {
 async function like(data) {
   const liked = await db('likes').where('howto_id', data.howto_id).andWhere('user_id', data.user_id);
   if(liked.length === 0) {
-    return db('likes').insert(data, ['id']);
+    const id = await db('likes').insert(data, ['id']);
+    return id[0].id;
   }
 };
 
 async function tried(data) {
   const liked = await db('tries').where('howto_id', data.howto_id).andWhere('user_id', data.user_id);
   if(liked.length === 0) {
-    return db('tries').insert(data, ['id']);
+    const id = await db('tries').insert(data, ['id']);
+    return id[0].id;
   }
 };
 
