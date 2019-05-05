@@ -1,7 +1,7 @@
 
 exports.seed = function(knex, Promise) {
   // Deletes ALL existing entries
-  return knex('howtos').truncate()
+  return knex('howtos').del()
     .then(function () {
       // Inserts seed entries
       return knex('howtos').insert([

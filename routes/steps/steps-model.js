@@ -10,8 +10,8 @@ module.exports = {
 };
 
 async function create(step) {
-  const [id] = await db('steps').insert(step);
-  return findByID(id);
+  const id = await db('steps').insert(step, ['id']);
+  return findByID(id[0].id);
 };
 
 function find() {
@@ -26,10 +26,11 @@ function findByHowto(howto_id) {
   return db('steps').where({howto_id});
 };
 
-function edit(id, changes) {
-  return db('steps').where({id}).update(changes);
+async function edit(id, changes) {
+  const update = await db('steps').where('id', id).update(changes, ['id']);
+  return update[0].id;
 };
 
 function remove(id) {
-  return db('steps').where({id}).del();
+  return db('steps').where('id', id).del();
 }

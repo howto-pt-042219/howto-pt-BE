@@ -39,8 +39,9 @@ router.post('/:id/liked', viewer, async (req, res) => {
  
   try {
     const count = await HowTo.like(data);
+    console.log(count);
 
-    if(count > 0) {
+    if(count.length > 0) {
       res.status(201).json({message: "Liked!"})
     } else {
       res.status(422).json({message: "Already liked"})
@@ -59,7 +60,7 @@ router.post('/:id/tried', viewer, async (req, res) => {
   try {
     const count = await HowTo.tried(data);
 
-    if(count > 0) {
+    if(count.length > 0) {
       res.status(201).json({message: "Tried!"})
     } else {
       res.status(422),json({message: "Already tried"})
@@ -111,7 +112,7 @@ router.put('/:id', async (req, res) => {  // creator restriction
         howto.user_id = oldHowto.author_id;
         const count = await HowTo.edit(id, howto);
 
-        if(count === 1 ) {
+        if(count === Number(id)) {
           const updateHowto = await HowTo.findByID(id);
           res.status(201).json(updateHowto);
         }

@@ -45,7 +45,7 @@ router.put('/:rev_id', async (req, res) => { // viewer restriction
     try {
       const count = await Reviews.edit(rev_id, review);
 
-      if(count === 1) {
+      if(count === Number(rev_id)) {
         const updateReview = await Reviews.findByID(rev_id);
         res.status(201).json(updateReview);
       }

@@ -7,8 +7,8 @@ module.exports = {
 };
 
 async function create(user) {
-  const [id] = await db('user-cred').insert(user);
-  return findByID(id);
+  const id = await db('user-cred').insert(user, ['id']);
+  return findByID(id[0].id);
 };
 
 function findBy(username) {
