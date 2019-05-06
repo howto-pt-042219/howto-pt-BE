@@ -30,7 +30,7 @@ router.post('/login', async (req, res) => {
 
   if(username && password) {
     try {
-      const user = await Users.findBy({username});
+      const user = await Users.findBy(username);
       console.log(user);
       if(user && bcrypt.compareSync(password, user.password)) {
         const token = generateToken(user);
