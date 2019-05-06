@@ -35,7 +35,7 @@ function creator(req, res, next) {
         if(decodedToken.creator) {
           next();
         } else {
-          res.status(401).json({error: "User not verified."})
+          res.status(401).json({error: "You dont have the ability to delete that how to."})
         }
       }
     })
