@@ -19,7 +19,9 @@ async function create(howto) {
 };
 
 function find() {
-  return db('howtos');
+  return db('howtos as h')
+    .join('user-cred as u', 'u.id', 'h.user_id')
+    .select('h.id', 'title', 'overview', 'likes', 'tries', 'username as author', 'u.id as author_id');
 };
 
 async function findByID(id) {

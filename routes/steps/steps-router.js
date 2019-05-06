@@ -1,6 +1,7 @@
 const router = require('express').Router({mergeParams: true});  // /howto/:id/steps
 const knex = require('knex');
 const config = require('../../knexfile.js');
+const { viewer, creator } = require('../auth/restricted-middleware.js');
 
 const dbENV = process.env.DB_ENV || 'development';
 const connection = knex(config[dbENV]);
@@ -8,7 +9,7 @@ const connection = knex(config[dbENV]);
 const Steps = require('./steps-model.js');
 const HowTo = require('../howto/howto-model.js');
 
-router.post('/', async (req, res) => { // creator restriction
+router.post('/', creator, async (req, res) => { // creator restriction
   const newStep = { title, description, num } = req.body;
   newStep.howto_id = Number(req.params.id);
 
@@ -52,7 +53,7 @@ router.post('/', async (req, res) => { // creator restriction
   }
 });
 
-router.get('/', async (req, res) => { // viewer restriction
+router.get('/', viewer, async (req, res) => { // viewer restriction
   try {
     const steps = await Steps.findByHowto(req.params.id);
     steps.sort((a, b) => a.num - b.num);
@@ -62,7 +63,7 @@ router.get('/', async (req, res) => { // viewer restriction
   }
 });
 
-router.put('/:step_id', async (req, res) => { // creator restriction
+router.put('/:step_id', creator, async (req, res) => { // creator restriction
   const newStep = { title, description } = req.body;
   const { id, step_id } = req.params;
 
@@ -93,7 +94,7 @@ router.put('/:step_id', async (req, res) => { // creator restriction
   }
 });
 
-router.delete('/:step_id', async (req, res) => { // creator restriction
+router.delete('/:step_id', creator, async (req, res) => { // creator restriction
   const id = req.params.step_id;
 
   try {
