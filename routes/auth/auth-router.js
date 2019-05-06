@@ -52,7 +52,7 @@ function generateToken(user) {
   const payload = {
     subject: user.id,
     username: user.username,
-    creator: user.creator === 1 ? true : false
+    creator: user.creator
   };
 
   const options = {
