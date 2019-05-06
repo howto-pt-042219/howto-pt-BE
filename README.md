@@ -18,6 +18,9 @@ https://howto-pt-042219.herokuapp.com/api
 | PUT | /howto/:id | Updates title and overview. API handles user_id to prevent conflicts. Returns updated howto |
 | DELETE | /howto/:id | Removes How To from DB along with associated steps and reviews |
 | -- | -- | -- |
+| POST | /howto/:id/liked | Adds a like to the server. No data required as the backend takes care of it |
+| POST | /howto/:id/tried | Adds a try to the server. No data required as the backend takes care of it |
+| -- | -- | -- |
 | POST | /howto/:id/steps | Adds step to the DB. Returns added step |
 | GET | /howto/:id/steps | Returns all steps belonging to how-to matching :id. |
 | PUT | /howto/:id/steps/:step_id | Updates the title and/or description of selected step |
