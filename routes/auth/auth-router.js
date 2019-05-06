@@ -33,10 +33,11 @@ router.post('/login', async (req, res) => {
       const user = await Users.findBy(username).first();
       console.log(user);
       if(user && bcrypt.compareSync(password, user.password)) {
+        const loggedUser = await Users.findByID(user.id);
         const token = generateToken(user);
         res.status(202).json({
           token,
-          user
+          loggedUser
         });
       }
     } catch (e) {
