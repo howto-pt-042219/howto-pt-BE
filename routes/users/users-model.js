@@ -12,7 +12,7 @@ async function create(user) {
 };
 
 function findBy(username) {
-  return db('user-cred').where(username)
+  return db('user-cred').where(username).select('id', 'username', 'creator');
 }
 
 function findByID(id) {
